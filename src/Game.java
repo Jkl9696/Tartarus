@@ -4,6 +4,7 @@ import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -20,8 +21,10 @@ public class Game {
 	Font normalFont = new Font("Times New Roman", Font.PLAIN, 28);
 	JButton startButton, choice1, choice2, choice3, choice4 ;
 	JTextArea mainTextArea;
-	int playerHP, monsterHP, silverRing;
-	String weapon, position;
+	int playerHP, monsterHP, silverRing, roomcount;
+	String weapon;
+	String position;
+	static int score = 0;
 	
 	TitleScreenHandler tsHandler = new TitleScreenHandler();
 	ChoiceHandler choiceHandler = new ChoiceHandler();
@@ -32,6 +35,7 @@ public class Game {
 	new Game();
 
 	}
+	
 	public Game() {
 
 	/**
@@ -238,6 +242,8 @@ public class Game {
 	public void actionPerformed(ActionEvent event) {
 	// TODO Auto-generated method stub
 	createGameScreen();
+	
+	
 	}
 
 	}
@@ -253,85 +259,106 @@ public class Game {
 	switch(yourChoice) {
 	case "c1": 
 	if(silverRing==1) {
+	roomcount += 1;
 	ending();
+	
 	}
 	else {
+	roomcount += 1;
 	talkGuard(); 
 	}
 	break;
-	case "c2": attackGuard(); break;
-	case "c3": crossRoad(); break;
+	case "c2": attackGuard();roomcount += 1; break;
+	case "c3": crossRoad();roomcount += 1; break;
 	case "c4": break;
 	}
 	break;
 	case"talkGuard":
 	switch(yourChoice) {
-	case "c1" : townGate(); break;
+	case "c1" : townGate();roomcount += 1; break;
 	}
 	break;
 	case"attackGuard":
 	switch(yourChoice) {
-	case "c1" : townGate(); break;
+	case "c1" : townGate();roomcount += 1; break;
 	}
 	break;
 	case"crossRoad":
 	switch(yourChoice) {
-	case "c1": north(); break;
-	case "c2": east(); break;
-	case "c3": townGate(); break;
-	case "c4": west(); break;
+	case "c1": north();roomcount += 1; break;
+	case "c2": east();roomcount += 1; break;
+	case "c3": townGate();roomcount += 1; break;
+	case "c4": west();roomcount += 1; break;
 	}
 	break;
 	case "north":
 	switch(yourChoice) {
-	case "c1": crossRoad(); break;
-	case "c2": north2(); break;
+	case "c1": crossRoad();roomcount += 1; break;
+	case "c2": north2();roomcount += 1; break;
 	}
 	break;
 	case"north2":
 	switch(yourChoice) {
-	case "c1": north(); break;
-	case "c2": smallChest(); break;
+	case "c1": north();roomcount += 1; break;
+	case "c2": smallChest();roomcount += 1; break;
 	}
 	break;
 	case "smallChest":
 	switch(yourChoice) {	
-	case "c1": north2(); break;
+	case "c1": north2();roomcount += 1; break;
 	}
 	break;
 	case "east":
 	switch(yourChoice) {
-	case "c1": crossRoad(); break;
-	case "c2":  emptyRoom(); break;
+	case "c1": crossRoad();roomcount += 1; break;
+	case "c2":  emptyRoom();roomcount += 1; break;
 	}
 	break;
 	case"emptyRoom":
 	switch(yourChoice) {
-	case "c1": east(); break;
-	case "c2": east2(); break;
+	case "c1": east();roomcount += 1; break;
+	case "c2": east2();roomcount += 1; break;
 	}
 	break;
 	case"east2":
 	switch(yourChoice) {
-	case "c1": emptyRoom(); break;
+	case "c1": emptyRoom();roomcount += 1; break;
 	}
 	break;
 	case"west":
 	switch(yourChoice) {
-	case "c1": fight(); break;
-	case "c2": crossRoad(); break;
+	case "c1": fight();roomcount += 1; break;
+	case "c2": crossRoad();roomcount += 1; break;
 	}
 	break;
 	case"fight":
 	switch(yourChoice) {
-	case "c1": playerAttack(); break;
-	case "c2": crossRoad(); break;
+	case "c1": playerAttack();roomcount += 1; break;
+	case "c2": crossRoad();roomcount += 1; break;
 	case "c3": break;
 	}
 	break;
+	
+	
+	//  if i wanted continuous play through buttons 
+	//  but the scoring system would be off
+	  
+	//case"lose":
+	//switch(yourChoice) {
+	//case "c1": playerSetup(); break;
+	//}
+	//break;
+	//case"ending":
+	//switch(yourChoice) {
+	//case "c1": playerSetup(); break;
+	//}
+	//break;	
+	
+	
 	case"playerAttack":
 	switch(yourChoice) {
 	case "c1": 
+	roomcount += 1;
 	if(monsterHP<1) {
 	win();
 	}
@@ -344,6 +371,7 @@ public class Game {
 	case"monsterAttack":
 	switch(yourChoice) {
 	case "c1": 
+	roomcount += 1;
 	if(playerHP<1) {
 	lose();
 	}
@@ -355,12 +383,14 @@ public class Game {
 	break;
 	case"win":
 	switch(yourChoice) {
-	case "c1": crossRoad(); break;
+	case "c1": crossRoad();roomcount += 1; break;
 	}
 	break;
-
 	}
+	
 	}
+	
+	
 
 
 	public void talkGuard() {
@@ -475,7 +505,23 @@ public class Game {
 	}
 	
 	}
-
+	
+	public void setScore() {
+		
+		if(weapon.equals("Fist")) {
+			score = roomcount * 1 ;
+			}
+		else if(weapon.equals("knife")) {
+			score = roomcount * 5 ;
+			}
+		else if(weapon.equals("Long Sword")) {
+			score = roomcount * 10 ;
+			}
+		else if(weapon.equals("Demonic Sword")) {
+			score = roomcount * 15 ;
+			}
+	}
+	
 	public void west() {
 	position = "west"; 
 
@@ -590,6 +636,16 @@ public class Game {
 	choice2.setVisible(false);
 	choice3.setVisible(false);
 	choice4.setVisible(false);
+	
+	setScore();
+	
+	Scoring s = new Scoring();
+	try {
+		s.writing(score);
+	} catch (IOException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	}
 
 	}
 	
@@ -631,7 +687,9 @@ public class Game {
 		
 	}
 	
+	
 	}
 	}
+
 
 
